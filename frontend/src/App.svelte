@@ -1,11 +1,13 @@
 <script lang="ts">
   import Stopwatch from "./components/Stopwatch.svelte";
-  import Sidebar from "./sections/Sidebar.svelte";
+  // import Sidebar from "./sections/Sidebar.svelte";
+  import Sidebar from "./sections/Sidebar/Sidebar.svelte";
   import { GetConstants, DeleteSkill } from "../wailsjs/go/main/App.js";
   import { constants } from "./stores/backendConstants";
   import Button from "./components/Button.svelte";
   import { activeSkill, skills } from "./stores/skillStore";
   import Ring from "./components/Ring.svelte";
+  import Modal from "@components/Modal.svelte";
 
   async function getConstants(): Promise<void> {
     try {
@@ -33,23 +35,24 @@
 
 <main>
   <Sidebar />
-  <Ring
-        color="purple"
+  <!-- <Ring
+        startingColor="#fa114f"
+        endColor="#f93885"
         innerDiameter={400}
-        outerDiameter={450}
+        outerDiameter={850}
         type={"set"}
         animationLength={25}
-        percentFilled={25}
-      />
+        percentFilled={10}
+      /> -->
   <div class="temp">
-    {#if $activeSkill}
+    {#if $activeSkill || true}
       {#if counterType === "stopwatch"}
-        <!-- <Stopwatch /> -->
+        <Stopwatch />
       {/if}
-      <Button
+      <!-- <Button
         onClick={() => deleteSkill($activeSkill.Name)}
         text={"Delete skill"}
-      />
+      /> -->
     {/if}
   </div>
 </main>
@@ -61,7 +64,7 @@
     height: 100%;
   }
   .temp {
-    background-color: rgb(48, 33, 36);
+    background-color: #111;
     flex-grow: 2;
     display: flex;
     justify-content: center;

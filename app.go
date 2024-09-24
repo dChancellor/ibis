@@ -102,3 +102,19 @@ func (a *App) DeleteSkill(name string) ([]Skill, error) {
     // Retrieve and return the remaining skills
     return a.GetSkills()
 }
+
+func (a *App) DeleteAllSkills() error {
+	// Prepare the DELETE statement
+	statement, err := db.Prepare("DELETE FROM skills")
+	if err != nil {
+		return err
+	}
+
+	// Execute the DELETE statement to remove all rows
+	_, err = statement.Exec()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

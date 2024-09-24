@@ -67,12 +67,12 @@ func InitializeDB() {
 }
 
 func main() {
+	var err error
 	// Create an instance of the app structure
 	app := NewApp()
 	InitializeDB()
-
 	// Create application with options
-	err := wails.Run(&options.App{
+	err = wails.Run(&options.App{
 		Title:  "Ibis",
 		Width:  1024,
 		Height: 1024,

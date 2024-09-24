@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
     "ignoreDeprecations": "5.0",
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -15,7 +16,15 @@
      */
     "allowJs": true,
     "checkJs": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@sections/*": ["src/sections/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@assets/*": ["src/assets/*"],
+      "@stores/*": ["src/stores/*"],
+      "@wails/*": ["wailsjs/go/*"],
+    }
   },
   "include": [
     "src/**/*.d.ts",

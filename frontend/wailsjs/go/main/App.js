@@ -6,6 +6,10 @@ export function AddSkill(arg1) {
   return window['go']['main']['App']['AddSkill'](arg1);
 }
 
+export function DeleteAllSkills() {
+  return window['go']['main']['App']['DeleteAllSkills']();
+}
+
 export function DeleteSkill(arg1) {
   return window['go']['main']['App']['DeleteSkill'](arg1);
 }

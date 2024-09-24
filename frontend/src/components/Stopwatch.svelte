@@ -30,22 +30,25 @@
 
 <div class="rings" on:click={toggleStopwatch} on:keypress={toggleStopwatch}>
   <!-- {formatTime(time)} -->
-  <!-- <Ring
-    color="#710014"
-    innerDiameter={350}
-    outerDiameter={400}
+  <Ring
+    startingColor="#fa114f"
+    endColor="#f93885"
+    innerDiameter={470}
+    outerDiameter={600}
     type={"timed"}
     animationLength={3600}
   />
   <Ring
-    color="#2a0041"
+    startingColor="#99ff01"
+    endColor="#d8ff00"
     innerDiameter={300}
-    outerDiameter={350}
+    outerDiameter={470}
     type={"timed"}
     animationLength={60}
-  /> -->
+  />
   <Ring
-    color="rgb(255, 255, 0)"
+    startingColor="#00d8ff"
+    endColor="#02ffa9"
     innerDiameter={220}
     outerDiameter={300}
     type={"timed"}
@@ -54,7 +57,7 @@
 </div>
 
 <style>
-    .rings {
+  .rings {
     position: relative;
     height: 250px;
     width: 250px;

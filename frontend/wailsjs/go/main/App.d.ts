@@ -4,6 +4,8 @@ import {main} from '../models';
 
 export function AddSkill(arg1:string):Promise<void>;
 
+export function DeleteAllSkills():Promise<void>;
+
 export function DeleteSkill(arg1:string):Promise<Array<main.Skill>>;
 
 export function GetConstants():Promise<main.MessagesStruct>;

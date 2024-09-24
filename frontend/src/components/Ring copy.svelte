@@ -1,7 +1,6 @@
 <script lang="ts">
   type RingType = "timed" | "set";
-  export let startingColor: string;
-  export let endColor: string;
+  export let color: string;
   export let innerDiameter: number;
   export let outerDiameter: number;
 
@@ -13,7 +12,7 @@
   let secondHalfDegreesRotated: number = 0;
 
   if (percentFilled > 50) {
-    firstHalfDegreesRotated = 225 - 180;
+    firstHalfDegreesRotated = 225 + 180;
     secondHalfDegreesRotated = 225 + (percentFilled - 50) * 3.6;
   } else {
     firstHalfDegreesRotated = 225 + percentFilled * 3.6;
@@ -26,9 +25,8 @@
     class={"timer"}
     style={`--outside-circle-width: ${outerDiameter}px; 
     --inside-circle-width: ${innerDiameter}px; 
-    --animation-length: ${animationLength}s;
-    --hand-color: conic-gradient(${startingColor}, ${endColor})
-    `}
+    --hand-color: ${color}; 
+    --animation-length: ${animationLength}s;`}
   >
     <div class="hand"><span></span></div>
     <div class="hand"><span></span></div>
@@ -38,7 +36,7 @@
     class={"timer"}
     style={`--outside-circle-width: ${outerDiameter}px; 
     --inside-circle-width: ${innerDiameter}px; 
-    --hand-color: conic-gradient(${startingColor}, ${endColor})
+    --hand-color: ${color};
     `}
   >
     <div class="hand">
@@ -52,7 +50,7 @@
 
 <style>
   .timer {
-    background: var(--hand-color);
+    background: rgba(0, 0, 0, 0.2);
     border-radius: 50%;
     height: var(--outside-circle-width);
     position: absolute;
@@ -60,18 +58,6 @@
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
-  }
-
-  .timer:before {
-    content: "";
-    border-radius: 50%;
-    height: calc(var(--outside-circle-width) - 5px);
-    position: absolute;
-    aspect-ratio: 1/1;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    box-shadow: 0px 0px 0px 10px #111;
   }
 
   .timer:after {
@@ -95,10 +81,11 @@
   }
 
   .hand span {
-    border: solid rgba(0, 0, 0);
+    border: solid;
+    /* border: solid var(--hand-color); */
     border-width: calc(var(--outside-circle-width) / 2);
-    border-top-color: transparent;
-    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
     border-radius: 50%;
     display: block;
     position: absolute;
@@ -115,10 +102,13 @@
 
   .hand:first-child span {
     animation-name: spin1;
+    border-top-color: radial-gradient(rgb(224, 12, 12), rgb(210, 35, 35)) padding-box, radial-gradient(to left, darkblue, rgb(33, 17, 40)) border-box;
   }
 
   .hand:last-child span {
     animation-name: spin2;
+    background: radial-gradient(white, white) padding-box, radial-gradient(to right, darkblue, rgb(33, 17, 40)) border-box;
+    /* border-top-color: linear-gradient(white, white) padding-box, linear-gradient(to left, darkblue, rgb(33, 17, 40)) border-box; */
   }
 
   @keyframes spin1 {
