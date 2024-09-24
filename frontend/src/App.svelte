@@ -1,74 +1,89 @@
 <script lang="ts">
-  import Stopwatch from "./components/Stopwatch.svelte";
-  // import Sidebar from "./sections/Sidebar.svelte";
-  import Sidebar from "./sections/Sidebar/Sidebar.svelte";
-  import { GetConstants, DeleteSkill } from "../wailsjs/go/main/App.js";
-  import { constants } from "./stores/backendConstants";
-  import Button from "./components/Button.svelte";
-  import { activeSkill, skills } from "./stores/skillStore";
-  import Ring from "./components/Ring.svelte";
-  import Modal from "@components/Modal.svelte";
+  import type { CounterType } from "@globaltypes/global";
 
-  async function getConstants(): Promise<void> {
+  import { GetConstants } from "@wails/main/App.js";
+  import { constants } from "@stores/backendConstants";
+  import { activeSkill } from "@stores/skillStore";
+  import {throwError} from '@helpers/errorHandler'
+  import Sidebar from "@sections/Sidebar/Sidebar.svelte";
+  import TopBar from "@sections/TopBar/TopBar.svelte";
+  import Stopwatch from "@sections/Stopwatch/Stopwatch.svelte";
+
+  let counterType: CounterType = "stopwatch";
+
+  async function getConstantsFromBackend(): Promise<void> {
     try {
       let res = await GetConstants();
       constants.set(res);
-    } catch {
-      console.error("The application failed loading");
+    } catch(err) {
+      throwError("The application failed loading", err);
     }
   }
-
-  async function deleteSkill(name: string): Promise<void> {
-    try {
-      const res = await DeleteSkill(name);
-      skills.set(res);
-    } catch {
-      console.error("The application failed loading");
-    }
-  }
-
-  type CounterType = "timer" | "stopwatch" | "manual";
-  let counterType: CounterType = "stopwatch";
 </script>
 
-<svelte:window on:load={getConstants} />
+<svelte:window on:load={getConstantsFromBackend} />
 
+<Sidebar />
 <main>
-  <Sidebar />
-  <!-- <Ring
-        startingColor="#fa114f"
-        endColor="#f93885"
-        innerDiameter={400}
-        outerDiameter={850}
-        type={"set"}
-        animationLength={25}
-        percentFilled={10}
-      /> -->
-  <div class="temp">
-    {#if $activeSkill || true}
+    <!-- {#if $activeSkill}
+      <TopBar />
       {#if counterType === "stopwatch"}
         <Stopwatch />
       {/if}
-      <!-- <Button
-        onClick={() => deleteSkill($activeSkill.Name)}
-        text={"Delete skill"}
-      /> -->
-    {/if}
-  </div>
+    {/if} -->
 </main>
 
 <style>
-  main {
+  :global(body){
+    height: 100vh;
     display: flex;
     flex-flow: row;
-    height: 100%;
+    background-color: #0e1a30;
   }
-  .temp {
-    background-color: #111;
+  :global(*) {
+    margin: 0;
+    font-family: "Poppins";
+    font-weight: 400;
+    box-sizing: border-box; 
+  }
+  :global(button) {
+    all: unset;
+  }
+  :global(button:focus) {
+    outline: none;
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 400;
+    src:
+      local(""),
+      url("assets/fonts/Poppins-Regular.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 600;
+    src:
+      local(""),
+      url("assets/fonts/Poppins-SemiBold.ttf") format("truetype");
+  }  
+  @font-face {
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 900;
+    src:
+      local(""),
+      url("assets/fonts/Poppins-Black.ttf") format("truetype");
+  }
+  main {
     flex-grow: 2;
     display: flex;
     justify-content: center;
-    align-items: center;
+    margin: 2rem 0rem;
+    flex-flow:column;
+    align-items:center;
+    gap: 2rem;
   }
 
 </style>

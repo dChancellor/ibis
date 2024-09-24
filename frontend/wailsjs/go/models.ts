@@ -16,6 +16,7 @@ export namespace main {
 	}
 	export class Skill {
 	    Name: string;
+	    SVG: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Skill(source);
@@ -24,6 +25,7 @@ export namespace main {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.Name = source["Name"];
+	        this.SVG = source["SVG"];
 	    }
 	}
 

@@ -1,37 +1,41 @@
 <script lang="ts">
-  export let text: string;
+  type ButtonStyle = 'primary' | 'secondary' | 'tertiary'
+  type ButtonSize = 'small' | 'medium' | 'large'
+
   export let onClick: () => void;
   export let iconBefore: string = null;
-
-  import Art from '~icons/noto-v1/artist-palette';
-
+  export let iconAfter: string = null;
+  export let style: ButtonStyle = 'primary';
+  export let size: ButtonSize = 'medium';
 </script>
 
-<button on:click={onClick} on:keypress={onClick}>
+<button on:click={onClick} on:keypress={onClick} class={`${style} ${size}`}>
   {#if iconBefore}
-    <span class="icon-before">{Art}</span>
+    <span class="icon">{@html iconBefore}</span>
   {/if}
-  {text}
+  <slot />
+  {#if iconAfter}
+    <span class="icon">{@html iconAfter}</span>
+  {/if}
 </button>
 
 <style>
-  button {
-    all: unset; /* Resets all button-specific styles */
-    box-sizing: border-box; /* Ensures padding and border are included in width and height */
-    display: inline-block; /* Allows padding and margins to be applied as intended */
-    cursor: pointer; /* Makes sure the button has the pointer cursor */
-    user-select: none; /* Prevents text selection on click */
-    background-color: transparent; /* Removes any background */
-    border: none; /* Removes the default border */
-    padding: 0; /* Removes default padding */
-    margin: 0; /* Removes default margin */
-    font-family: inherit; /* Inherits the font style from the parent */
-    font-size: inherit; /* Inherits the font size from the parent */
-    line-height: inherit; /* Inherits the line height from the parent */
-    text-align: center; /* Centers text horizontally */
-  }
-
-  button:focus {
-    outline: none; /* Removes focus outline when button is clicked */
-  }
+.primary {
+  color: white;
+}
+.secondary { 
+  color: white;
+}
+.tertiary {
+  color: transparent;
+}
+.small {
+  font-size: 0.75rem;
+}
+.medium {
+  font-size: 1rem;
+}
+.large {
+  font-size: 1.25rem;
+}
 </style>

@@ -1,0 +1,1 @@
+  export type CounterType = "timer" | "stopwatch" | "manual";

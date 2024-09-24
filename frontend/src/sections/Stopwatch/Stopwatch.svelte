@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Button from "./Button.svelte";
-  import Ring from "./Ring.svelte";
+  import Button from "../../components/Button.svelte";
+  import Ring from "../../components/Ring.svelte";
 
   let time = 0;
   let interval;
@@ -59,7 +59,7 @@
 <style>
   .rings {
     position: relative;
-    height: 250px;
-    width: 250px;
+    height: 600px;
+    width: 600px;
   }
 </style>

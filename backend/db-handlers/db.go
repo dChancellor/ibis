@@ -1,27 +1,3 @@
-package main
-
-import (
-	"embed"
-	"os"
-	"fmt"
-	"path/filepath"
-
-	"github.com/wailsapp/wails/v2"
-	"github.com/wailsapp/wails/v2/pkg/options"
-	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
-
-	"database/sql"
-	"log"
-	_ "github.com/mattn/go-sqlite3"
-)
-
-//go:embed all:frontend/dist
-var assets embed.FS
-
-var db *sql.DB
-
-var appName = "Ibis"
-
 // GetDBPath returns the path where the SQLite database should be stored
 func GetDBPath(appName, dbName string) (string, error) {
     // Get the user-specific config directory (cross-platform)
@@ -69,29 +45,4 @@ func InitializeDB() {
     statement.Exec()
 	fmt.Println("DATABASE COMPLETE")
 
-}
-
-func main() {
-	var err error
-	// Create an instance of the app structure
-	app := NewApp()
-	InitializeDB()
-	// Create application with options
-	err = wails.Run(&options.App{
-		Title:  "Ibis",
-		Width:  1024,
-		Height: 1024,
-		AssetServer: &assetserver.Options{
-			Assets: assets,
-		},
-		// BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
-		Bind: []interface{}{
-			app,
-		},
-	})
-
-	if err != nil {
-		println("Error:", err.Error())
-	}
 }

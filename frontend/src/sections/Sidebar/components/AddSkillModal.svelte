@@ -1,33 +1,47 @@
 <script lang="ts">
+  import { addSkill as addSkillToDB } from "@helpers/skillHooks";
+  import { closeModal } from "@stores/modalContext";
+
   import Button from "@components/Button.svelte";
   import Modal from "@components/Modal.svelte";
   import { constants } from "@stores/backendConstants";
-  import { closeModal } from "@stores/modalContext";
-  import { AddSkill } from "@wails/main/App";
 
   export let dialog: HTMLDialogElement;
-  export let getSkills: () => void;
 
-  let newSkillName: string | null;
   let errorText: string;
 
-  async function addSkill(newSkillName: string): Promise<void> {
-    if (!newSkillName) {
-      errorText = "Please enter a skill name";
-      return;
+  let newSkillName: string | null;
+  let svgFileContent = '';
+
+  let fileInput: HTMLInputElement;
+
+  function handleFileUpload(event) {
+    const file = event.target.files[0];
+    if (file && file.type === 'image/svg+xml') {
+      const reader = new FileReader();
+      reader.onload = () => {
+        svgFileContent = reader.result as string; 
+      };
+      reader.readAsText(file);  
+    } else {
+      errorText = 'Please upload an SVG file';
     }
+  }
+
+  function addSkill() {
     try {
-      await AddSkill(newSkillName);
-      dialog.close();
+      addSkillToDB(newSkillName, svgFileContent);
       newSkillName = null;
-      getSkills();
-    } catch (error) {
-      if ((error = $constants.SkillExistsMessage)) {
+      svgFileContent = '';
+      fileInput.value = '';
+      closeModal(dialog);
+    } catch(err) {
+      if ((err = $constants.SkillExistsMessage)) {
         errorText = "This skill name already exists";
       } else {
         errorText = "There was an error saving your skill";
-        console.error(errorText + ":", error);
       }
+      
     }
   }
 </script>
@@ -41,13 +55,13 @@
     bind:value={newSkillName}
     placeholder="Name of the new skill"
   />
-  <Button text={"Add skill"} onClick={() => addSkill(newSkillName)} />
+  <input type="file" accept=".svg" on:change={handleFileUpload} bind:this={fileInput}/>
+  <Button onClick={addSkill}>Add skill</Button>
   <Button
-    text={"Close"}
     onClick={() => {
       closeModal(dialog);
     }}
-  />
+  >Close</Button>
 </Modal>
 
 <style>

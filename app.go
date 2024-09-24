@@ -20,7 +20,9 @@ type MessagesStruct struct {
 }
 
 type Skill struct {
+    id int
     Name string
+    SVG string
 }
 
 var Messages = MessagesStruct{
@@ -40,7 +42,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) AddSkill(name string) error {
+func (a *App) AddSkill(name string, svg string) error {
     var ErrSkillExists = errors.New("This skill already exists")
     var exists bool
     err := db.QueryRow("SELECT EXISTS(SELECT 1 FROM skills WHERE name = ?)", name).Scan(&exists)
@@ -53,17 +55,18 @@ func (a *App) AddSkill(name string) error {
         return ErrSkillExists
     }
 
+    fmt.Println("SVG", svg)
     // If the skill doesn't exist, proceed to insert
-    statement, err := db.Prepare("INSERT INTO skills (name) VALUES (?)")
+    statement, err := db.Prepare("INSERT INTO skills (name, svg) VALUES (?, ?)")
     if err != nil {
         return err
     }
-    _, err = statement.Exec(name)
+    _, err = statement.Exec(name, svg)
     return err
 }
 
 func (a *App) GetSkills() ([]Skill, error) {
-    rows, err := db.Query("SELECT name FROM skills")
+    rows, err := db.Query("SELECT * FROM skills")
     if err != nil {
         return nil, err
     }
@@ -72,7 +75,10 @@ func (a *App) GetSkills() ([]Skill, error) {
     var skills = []Skill{}
     for rows.Next() {
         var skill Skill
-        rows.Scan(&skill.Name)
+        // rows.Scan(&skill.Name)
+        // rows.Scan(&skill.SVG)
+        err = rows.Scan(&skill.id, &skill.Name, &skill.SVG)
+        fmt.Println("ERROR", err)
         skills = append(skills, skill)
     }
     fmt.Println("SKILLS", skills)

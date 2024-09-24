@@ -3,7 +3,6 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import Icons from "unplugin-icons/vite";
 import * as path from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     svelte(),
@@ -18,6 +17,7 @@ export default defineConfig({
       '@stores': path.resolve(__dirname, 'src/stores'),
       '@helpers': path.resolve(__dirname, 'src/helpers'),
       '@assets': path.resolve(__dirname, 'src/assets'),
+      '@globaltypes': path.resolve(__dirname, 'src/globaltypes'),
       '@wails': path.resolve(__dirname, 'wailsjs/go')
     }
   }
