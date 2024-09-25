@@ -1,37 +1,37 @@
-<script lang='ts'>
-  import { DeleteSkill } from "@wails/application/App";
+<script lang="ts">
+  import MaterialSymbolsArrowBack from "~icons/material-symbols/arrow-back";
+  import PhTrashBold from '~icons/ph/trash-bold';
 
-    import { activeSkill, skills } from '@stores/skillStore';
+  import { activeSkill } from "@stores/skillStore";
+  import { deleteSkill } from "@helpers/skillHooks";
+  import Button from "@components/Button.svelte";
 
-    async function deleteSkill(name: string): Promise<void> {
-    try {
-      const res = await DeleteSkill(name);
-      skills.set(res);
-      activeSkill.set(null);
-    } catch {
-      console.error("The application failed loading");
-    }
-  }
+  let dialog: HTMLDialogElement;
+
+
 </script>
 
-<div class='topbar'>
-    <!-- TODO make these icon buttons -->
-    <button on:click={() => activeSkill.set(null)}>Back</button>
-    <p>{$activeSkill.Name}</p>
-    <!-- TODO show a modal to confirm deletion -->
-    <button on:click={() => deleteSkill($activeSkill.Name)}>Delete</button>
+<div class="topbar">
+  <Button onClick={() => activeSkill.set(null)}><MaterialSymbolsArrowBack /></Button>
+  <p>{$activeSkill.Name}</p>
+  <!-- TODO show a modal to confirm deletion -->
+  <Button onClick={() => deleteSkill($activeSkill.Name)}><PhTrashBold /></Button>
 </div>
 
 <style>
-.topbar {
-    width: 90%;
+  .topbar {
     height: 50px;
     background-color: #2f2c47;
     border-radius: 1rem;
-    display:flex;
-    flex-flow:row;
+    display: flex;
+    flex-flow: row;
     justify-content: space-between;
-    padding:.25rem 1rem;
-    margin-bottom:auto;
-}
+    padding: 0.25rem 1rem;
+    width: 100%;
+    align-items: center;
+  }
+  p {
+    margin-right: auto;
+    margin-left: 1rem;
+  }
 </style>

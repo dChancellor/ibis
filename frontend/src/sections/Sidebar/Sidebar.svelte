@@ -3,13 +3,13 @@
   import { openModal } from "@stores/modalContext";
   import { getSkills } from "@helpers/skillHooks";
 
-  import PhPlusFill from '~icons/ph/plus-fill';
+  import FoundationPlus from '~icons/foundation/plus';
 
   import SkillPill from "@sections/Sidebar/components/SkillPill.svelte";
   import Button from "@components/Button.svelte";
 
   import AddSkillModal from "./components/AddSkillModal.svelte";
-  
+
   let dialog: HTMLDialogElement;
 </script>
 
@@ -23,23 +23,30 @@
         name={skill.Name}
         isActive={$activeSkill?.Name === skill.Name}
         icon={skill.SVG}
-        onClick={() => activeSkill.set($activeSkill===skill ? null : skill)}
+        onClick={() => activeSkill.set($activeSkill === skill ? null : skill)}
       />
     {/each}
+    <Button full onClick={() => openModal(dialog)} size={"large"} --margin-block="1rem">
+      <FoundationPlus />
+    </Button>
   </div>
-  <Button onClick={() => openModal(dialog)} size={'large'}><PhPlusFill /></Button>
 </section>
 <AddSkillModal bind:dialog />
 
 <style>
   section {
-    padding-block: 2rem;
-    background-color: #2c293e96;
-    box-shadow: 1px 0px 1px 0px #dfdeff1c;
+    width: var(--sidebar-width);
+    padding: 2rem;
+    background-color: #13213b88;
+    position: fixed;
+    height: 100vh;
+    overflow-y: scroll;
   }
   .skills-list {
     display: flex;
     flex-flow: column;
-    gap: .25rem;
+    gap: 0.25rem;
+    align-items: center;
+    width: 100%;
   }
 </style>

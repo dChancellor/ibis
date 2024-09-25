@@ -7,9 +7,10 @@
   export let iconAfter: string = null;
   export let style: ButtonStyle = 'primary';
   export let size: ButtonSize = 'medium';
+  export let full: boolean = false;
 </script>
 
-<button on:click={onClick} on:keypress={onClick} class={`${style} ${size}`}>
+<button on:click={onClick} on:keypress={onClick} class:full class={`${style} ${size}` }>
   {#if iconBefore}
     <span class="icon">{@html iconBefore}</span>
   {/if}
@@ -20,8 +21,20 @@
 </button>
 
 <style>
+  button{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    margin-block: var(--margin-block)
+  }
 .primary {
-  color: white;
+  color: var(--background-color);
+  background-image: linear-gradient(rgb(254, 231, 54), #f2a72d);
+}
+.primary:hover{
+  background-image: linear-gradient(rgb(205, 186, 44), #c78822);
+
 }
 .secondary { 
   color: white;
@@ -38,4 +51,7 @@
 .large {
   font-size: 1.25rem;
 }
+.full {
+    width: 100%;
+  }
 </style>

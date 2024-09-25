@@ -18,7 +18,7 @@
       "@assets/*": ["src/assets/*"],
       "@stores/*": ["src/stores/*"],
       "@wails/*": ["wailsjs/go/*"],
-      "@globaltypes/*": ["src/globaltypes/*"],
+      "@typings/*": ["src/typings/*"],
     }
   },
   "include": [

@@ -17,18 +17,18 @@
     display: flex;
     flex-flow: row;
     align-items: center;
-    background-color: #2f2c47b0;
+    background-color: #1e2a46b0;
     padding: 0.75rem 1rem;
     border-radius: 1rem;
     margin-inline: 0.5rem;
-    color: #e1ddfd;
-    min-width: 150px;
     position: relative;
     box-shadow: 1px 3px 1px 1px #00000024;
+    width:100%;
+    width:100%;
   }
 
   .pill:hover {
-    background-color: #3f3c5a;
+    background-color: rgb(49, 46, 76);
   }
   .isActive {
     outline: #3f3c5a 2px solid;
@@ -43,4 +43,5 @@
     max-width: 100%;
     max-height: 100%;
   }
+
 </style>

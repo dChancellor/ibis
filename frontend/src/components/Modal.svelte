@@ -1,14 +1,7 @@
 <script lang="ts">
     import { activeModal } from '@stores/modalContext';
   
-    // export let modalId: string;
-  
     export let dialog: HTMLDialogElement;
-  
-    function close() {
-      activeModal.set(null);
-    }
-
 </script>
 
 <dialog bind:this={dialog}>

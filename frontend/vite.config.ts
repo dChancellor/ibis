@@ -17,7 +17,7 @@ export default defineConfig({
       '@stores': path.resolve(__dirname, 'src/stores'),
       '@helpers': path.resolve(__dirname, 'src/helpers'),
       '@assets': path.resolve(__dirname, 'src/assets'),
-      '@globaltypes': path.resolve(__dirname, 'src/globaltypes'),
+      '@typings': path.resolve(__dirname, 'src/typings'),
       '@wails': path.resolve(__dirname, 'wailsjs/go')
     }
   }

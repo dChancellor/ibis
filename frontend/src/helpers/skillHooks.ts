@@ -1,5 +1,5 @@
 import { activeSkill, skills } from "@stores/skillStore";
-import { AddSkill, GetSkills } from "@wails/application/App";
+import { AddSkill, DeleteSkill, GetSkills } from "@wails/application/App";
 import { throwError } from "./errorHandler";
 
 export async function getSkills(): Promise<void> {
@@ -27,5 +27,15 @@ export async function addSkill(
   } catch (error) {
     throwError(`${errorText}: ${newSkillName}, ${svgFileContent}`, error);
     return error;
+  }
+}
+
+export async function deleteSkill(name: string): Promise<void> {
+  try {
+    const res = await DeleteSkill(name);
+    skills.set(res);
+    activeSkill.set(null);
+  } catch {
+    throwError("The application failed loading");
   }
 }
