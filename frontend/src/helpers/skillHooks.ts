@@ -1,5 +1,5 @@
 import { activeSkill, skills } from "@stores/skillStore";
-import { AddSkill, GetSkills } from "@wails/main/App";
+import { AddSkill, GetSkills } from "@wails/application/App";
 import { throwError } from "./errorHandler";
 
 export async function getSkills(): Promise<void> {

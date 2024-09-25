@@ -1,4 +1,4 @@
 import {writable} from 'svelte/store'
-import { main } from '../../wailsjs/go/models'
+import { application } from '../../wailsjs/go/models'
 
-export const constants = writable<main.MessagesStruct>()
+export const constants = writable<application.MessagesStruct>()

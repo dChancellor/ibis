@@ -1,4 +1,4 @@
-module ten-thousand-hours
+module ibis
 
 go 1.21
 

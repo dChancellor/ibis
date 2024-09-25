@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { CounterType } from "@globaltypes/global";
 
-  import { GetConstants } from "@wails/main/App.js";
+  import { GetConstants } from "@wails/application/App.js";
   import { constants } from "@stores/backendConstants";
   import { activeSkill } from "@stores/skillStore";
   import {throwError} from '@helpers/errorHandler'

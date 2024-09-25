@@ -1,3 +1,18 @@
+package db
+
+import (
+	"os"
+	"fmt"
+	"path/filepath"
+
+	"database/sql"
+	"log"
+	_ "github.com/mattn/go-sqlite3"
+
+)
+
+var DB *sql.DB
+
 // GetDBPath returns the path where the SQLite database should be stored
 func GetDBPath(appName, dbName string) (string, error) {
     // Get the user-specific config directory (cross-platform)
@@ -17,8 +32,7 @@ func GetDBPath(appName, dbName string) (string, error) {
     return filepath.Join(appDir, dbName), nil
 }
 
-// InitializeDB opens a connection to the SQLite database
-func InitializeDB() {
+func InitializeDB(appName string) {
     var err error
 	var dbName = appName + ".db"
 	// Get the full path to the SQLite database file
@@ -29,14 +43,14 @@ func InitializeDB() {
 
 	fmt.Println("Database path:", dbPath)
 
-    db, err = sql.Open("sqlite3", dbPath)
+    DB, err = sql.Open("sqlite3", dbPath)
     if err != nil {
         log.Fatal(err)
     }
 
 	fmt.Println("DATABASE OPENED SUCCESSFULLY")
     // Create a table if it doesn't exist
-    statement, err := db.Prepare("CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY, name TEXT, svg TEXT)")
+    statement, err := DB.Prepare("CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY, name TEXT, svg TEXT)")
     if err != nil {
         log.Fatal(err)
     }

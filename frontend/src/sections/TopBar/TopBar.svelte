@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { DeleteSkill } from "@wails/main/App";
+  import { DeleteSkill } from "@wails/application/App";
 
     import { activeSkill, skills } from '@stores/skillStore';
 
