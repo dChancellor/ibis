@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { activeSkill, skills } from "@stores/skillStore";
-  import { openModal } from "@stores/modalContext";
-  import { getSkills } from "@helpers/skillHooks";
+  import { activeSkill, skills } from '@stores/skillStore';
+  import { openModal } from '@stores/modalContext';
+  import { getSkills } from '@helpers/skillHooks';
 
   import FoundationPlus from '~icons/foundation/plus';
 
-  import SkillPill from "@sections/Sidebar/components/SkillPill.svelte";
-  import Button from "@components/Button.svelte";
+  import SkillPill from '@sections/Sidebar/components/SkillPill.svelte';
+  import Button from '@components/Button.svelte';
 
-  import AddSkillModal from "./components/AddSkillModal.svelte";
+  import AddSkillModal from './components/AddSkillModal.svelte';
 
   let dialog: HTMLDialogElement;
 </script>
@@ -26,7 +26,7 @@
         onClick={() => activeSkill.set($activeSkill === skill ? null : skill)}
       />
     {/each}
-    <Button full onClick={() => openModal(dialog)} size={"large"} --margin-block="1rem">
+    <Button full onClick={() => openModal(dialog)} size={'large'} --margin-block="1rem">
       <FoundationPlus />
     </Button>
   </div>

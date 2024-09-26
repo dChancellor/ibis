@@ -17,21 +17,22 @@
     display: flex;
     flex-flow: row;
     align-items: center;
-    background-color: #1e2a46b0;
+    background-image: linear-gradient(rgba(41, 55, 91, 0.69), #1b253eb0);
     padding: 0.75rem 1rem;
     border-radius: 1rem;
     margin-inline: 0.5rem;
     position: relative;
     box-shadow: 1px 3px 1px 1px #00000024;
-    width:100%;
-    width:100%;
+    width: 100%;
+    width: 100%;
+    font-weight: 700;
   }
 
   .pill:hover {
     background-color: rgb(49, 46, 76);
   }
   .isActive {
-    outline: #3f3c5a 2px solid;
+    outline: #53587ca0 2px solid;
   }
   .icon {
     width: 24px;
@@ -43,5 +44,4 @@
     max-width: 100%;
     max-height: 100%;
   }
-
 </style>

@@ -1,27 +1,27 @@
 <script lang="ts">
-  import MaterialSymbolsArrowBack from "~icons/material-symbols/arrow-back";
+  import MaterialSymbolsArrowBack from '~icons/material-symbols/arrow-back';
   import PhTrashBold from '~icons/ph/trash-bold';
 
-  import { activeSkill } from "@stores/skillStore";
-  import { deleteSkill } from "@helpers/skillHooks";
-  import Button from "@components/Button.svelte";
+  import { activeSkill } from '@stores/skillStore';
+  import { deleteSkill } from '@helpers/skillHooks';
+  import Button from '@components/Button.svelte';
 
   let dialog: HTMLDialogElement;
-
-
 </script>
 
 <div class="topbar">
-  <Button onClick={() => activeSkill.set(null)}><MaterialSymbolsArrowBack /></Button>
+  <Button variant={'secondary'} size={'medium'} onClick={() => activeSkill.set(null)}>
+    <MaterialSymbolsArrowBack />
+  </Button>
   <p>{$activeSkill.Name}</p>
   <!-- TODO show a modal to confirm deletion -->
-  <Button onClick={() => deleteSkill($activeSkill.Name)}><PhTrashBold /></Button>
+  <Button variant={'secondary'} size={'medium'} onClick={() => deleteSkill($activeSkill.Name)}><PhTrashBold /></Button>
 </div>
 
 <style>
   .topbar {
     height: 50px;
-    background-color: #2f2c47;
+    background-color: #13213b88;
     border-radius: 1rem;
     display: flex;
     flex-flow: row;

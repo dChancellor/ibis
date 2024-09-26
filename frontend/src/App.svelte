@@ -1,26 +1,34 @@
 <script lang="ts">
-  import type { CounterType } from "src/typings/global";
+  import type { CounterType } from 'src/typings/global';
 
-  import { GetConstants } from "@wails/application/App.js";
-  import { constants } from "@stores/backendConstants";
-  import { isSideBarOpen } from "@stores/appStore";
-  import { activeSkill } from "@stores/skillStore";
-  import { throwError } from "@helpers/errorHandler";
-  import Sidebar from "@sections/Sidebar/Sidebar.svelte";
-  import TopBar from "@sections/TopBar/TopBar.svelte";
-  import Stopwatch from "@sections/Stopwatch/Stopwatch.svelte";
+  import { GetConstants } from '@wails/application/App.js';
+  import { constants } from '@stores/backendConstants';
+  import { isSideBarOpen } from '@stores/appStore';
+  import { activeSkill } from '@stores/skillStore';
+  import { throwError } from '@helpers/errorHandler';
+  import Sidebar from '@sections/Sidebar/Sidebar.svelte';
+  import TopBar from '@sections/TopBar/TopBar.svelte';
+  import Stopwatch from '@sections/Stopwatch/Stopwatch.svelte';
 
-  let counterType: CounterType = "stopwatch";
+  import SlideSelector from '@components/SlideSelector.svelte';
+  import Button from '@components/Button.svelte';
 
+  let counterType: CounterType = 'stopwatch';
 
   async function getConstantsFromBackend(): Promise<void> {
     try {
       let res = await GetConstants();
       constants.set(res);
     } catch (err) {
-      throwError("The application failed loading", err);
+      throwError('The application failed loading', err);
     }
   }
+
+  const onSelect = (selection) => {
+    console.log(selection);
+    // TODO - this can be better typed I think - I dislike using "as"
+    counterType = selection.toLowerCase() as CounterType;
+  };
 </script>
 
 <svelte:window on:load={getConstantsFromBackend} />
@@ -29,15 +37,14 @@
   <Sidebar />
 {/if}
 
-
 <main class:isSideBarOpen>
-
-    {#if $activeSkill}
-      <TopBar />
-      <!-- {#if counterType === "stopwatch"}
-        <Stopwatch />
-      {/if} -->
+  {#if $activeSkill}
+    <TopBar />
+    <SlideSelector buttonLabels={['Stopwatch', 'Timer', 'Manual']} {onSelect}></SlideSelector>
+    {#if counterType === 'stopwatch'}
+      <Stopwatch />
     {/if}
+  {/if}
 </main>
 
 <style>
@@ -48,8 +55,7 @@
     display: flex;
     flex-flow: row;
     background-color: var(--background-color);
-    color: #e1ddfd;
-
+    color: #d3d3ff;
   }
   :global(#app) {
     display: flex;
@@ -59,7 +65,7 @@
   }
   :global(*:not(dialog)) {
     margin: 0;
-    font-family: "Poppins";
+    font-family: 'Poppins';
     font-weight: 400;
     box-sizing: border-box;
   }
@@ -70,29 +76,46 @@
   :global(button:focus) {
     outline: none;
   }
+  /* TODO - Reduce this to three weights */
   @font-face {
-    font-family: "Poppins";
+    font-family: 'Poppins';
     font-style: normal;
     font-weight: 400;
     src:
-      local(""),
-      url("assets/fonts/Poppins-Regular.ttf") format("truetype");
+      local(''),
+      url('assets/fonts/Poppins-Regular.ttf') format('truetype');
   }
   @font-face {
-    font-family: "Poppins";
+    font-family: 'Poppins';
     font-style: normal;
     font-weight: 600;
     src:
-      local(""),
-      url("assets/fonts/Poppins-SemiBold.ttf") format("truetype");
+      local(''),
+      url('assets/fonts/Poppins-SemiBold.ttf') format('truetype');
   }
   @font-face {
-    font-family: "Poppins";
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    src:
+      local(''),
+      url('assets/fonts/Poppins-Bold.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 800;
+    src:
+      local(''),
+      url('assets/fonts/Poppins-ExtraBold.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'Poppins';
     font-style: normal;
     font-weight: 900;
     src:
-      local(""),
-      url("assets/fonts/Poppins-Black.ttf") format("truetype");
+      local(''),
+      url('assets/fonts/Poppins-Black.ttf') format('truetype');
   }
   main {
     display: flex;
@@ -100,10 +123,11 @@
     width: 100%;
     flex-flow: column;
     padding: 2rem;
+    align-items: center;
+    gap: 1rem;
   }
   .isSideBarOpen {
     margin-inline: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
   }
-
 </style>

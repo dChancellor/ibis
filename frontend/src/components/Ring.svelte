@@ -1,5 +1,5 @@
 <script lang="ts">
-  type RingType = "timed" | "set";
+  type RingType = 'timed' | 'set';
   export let startingColor: string;
   export let endColor: string;
   export let innerDiameter: number;
@@ -21,9 +21,9 @@
   }
 </script>
 
-{#if type === "timed"}
+{#if type === 'timed'}
   <div
-    class={"timer"}
+    class={'timer'}
     style={`--outside-circle-width: ${outerDiameter}px; 
     --inside-circle-width: ${innerDiameter}px; 
     --animation-length: ${animationLength}s;
@@ -33,9 +33,9 @@
     <div class="hand"><span></span></div>
     <div class="hand"><span></span></div>
   </div>
-{:else if type === "set"}
+{:else if type === 'set'}
   <div
-    class={"timer"}
+    class={'timer'}
     style={`--outside-circle-width: ${outerDiameter}px; 
     --inside-circle-width: ${innerDiameter}px; 
     --hand-color: conic-gradient(${startingColor}, ${endColor})
@@ -63,7 +63,7 @@
   }
 
   .timer:before {
-    content: "";
+    content: '';
     border-radius: 50%;
     height: calc(var(--outside-circle-width) - 5px);
     position: absolute;
@@ -75,9 +75,9 @@
   }
 
   .timer:after {
-    background: #111;
+    background: var(--background-color);
     border-radius: 50%;
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     height: var(--inside-circle-width);
