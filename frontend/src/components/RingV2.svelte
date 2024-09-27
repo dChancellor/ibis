@@ -40,7 +40,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(255, 192, 203, 0.247);
   }
   svg {
     transform: rotate(-90deg);
@@ -49,7 +48,6 @@
   circle {
     fill: none;
     stroke-width: var(--stroke-width);
-    /* stroke-linecap: round; */
   }
 
   .background-ring {
@@ -69,22 +67,21 @@
   .leading-circle {
     position: absolute;
     height: var(--diameter);
-    width: 20px;
+    width: calc(var(--stroke-width) * 1px);
     top: 0px;
     left: 50%;
-    margin-left: -10px;
-    animation: rotateClockwise 60s linear infinite;
+    margin-left: calc(var(--stroke-width) / 2 * -1px);
+    animation: rotateClockwise var(--duration) linear infinite;
   }
 
   .leading-circle:before {
     background: linear-gradient(90deg, transparent 0 40%, var(--color) 40% 100%);
-    /* background: var(--color); */
     display: block;
     content: '';
-    height: 20px;
-    width: 20px;
+    height: calc(var(--stroke-width) * 1px);
+    width: calc(var(--stroke-width) * 1px);
     border-radius: 50%;
-    box-shadow: 3px 2px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 4px 2px 3px rgba(0, 0, 0, 0.1);
   }
 
   @keyframes spin {

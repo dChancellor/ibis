@@ -57,6 +57,8 @@
   /> -->
   <!-- <RingV2 diameter={100} duration={60} strokeWidth={20} color={'#00d8ff'} /> -->
   <RingV2 diameter={55} duration={60} strokeWidth={20} color={'#FFF'} />
+  <RingV2 diameter={105} duration={60} strokeWidth={10} color={'#FFF'} />
+  <RingV2 diameter={155} duration={60} strokeWidth={30} color={'#FFF'} />
 </div>
 
 <style>
