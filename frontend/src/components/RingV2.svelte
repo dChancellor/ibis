@@ -1,4 +1,5 @@
 <script lang="ts">
+  export let isRunning;
   export let diameter;
   export let duration;
   export let color;
@@ -25,13 +26,13 @@
     />
     <circle
       class="progress-ring"
+      style={`animation-play-state:${isRunning ? 'running' : 'paused'}`}
       cx={(diameter + strokeWidth) / 2}
       cy={(diameter + strokeWidth) / 2}
       r={diameter / 2}
-      marker-end="url(#end-marker)"
     />
   </svg>
-  <div class="leading-circle"></div>
+  <div class="leading-circle" style={`animation-play-state:${isRunning ? 'running' : 'paused'}`} />
 </div>
 
 <style>
@@ -52,6 +53,7 @@
 
   .background-ring {
     stroke: rgba(255, 255, 255, 0.2);
+    color: #d036d2;
   }
 
   .progress-ring {

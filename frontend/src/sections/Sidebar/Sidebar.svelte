@@ -16,7 +16,6 @@
 <svelte:window on:load={getSkills} />
 
 <section>
-  <!-- TODO - Implement a search? -->
   <div class="skills-list">
     {#each $skills as skill}
       <SkillPill

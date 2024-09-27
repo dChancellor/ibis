@@ -44,8 +44,7 @@
       {#if counterType === 'Stopwatch'}
         <Stopwatch />
       {:else if counterType === 'Timer'}
-        <RingV2 diameter={100} duration={60} strokeWidth={20} color={'#00d8ff'} />
-        <RingV2 diameter={100} duration={60} strokeWidth={20} color={'#00d8ff'} />
+        <p>Timer</p>
       {:else if counterType === 'Manual'}
         <p>Manual</p>
       {/if}

@@ -36,7 +36,9 @@
     border-radius: 0.5rem;
     margin-block: var(--margin-block);
     padding: 0.25rem 0.5rem;
+    font-weight: 400;
   }
+
   .primary {
     color: var(--background-color);
     background: linear-gradient(rgb(254, 231, 54), #f2a72d);
