@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { onMount, SvelteComponent } from 'svelte';
-  import { createEventDispatcher } from 'svelte';
-
   import Button from '@components/Button.svelte';
 
   export let buttonLabels: string[];
@@ -13,7 +10,7 @@
 <div class="slideselector">
   {#each buttonLabels as label, i}
     <Button
-      onClick={() => (selected = label)}
+      onClick={() => onSelect(label)}
       variant={selected === label ? 'primary' : 'secondary'}
       styles={{
         'border-radius': i === 0 ? '0.5rem 0 0 0.5rem' : i === buttonLabels.length - 1 ? '0 0.5rem 0.5rem 0' : '0',

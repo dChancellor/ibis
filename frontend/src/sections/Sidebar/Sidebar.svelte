@@ -26,7 +26,7 @@
         onClick={() => activeSkill.set($activeSkill === skill ? null : skill)}
       />
     {/each}
-    <Button full onClick={() => openModal(dialog)} size={'large'} --margin-block="1rem">
+    <Button full onClick={() => openModal(dialog)} size={'small'} --margin-block="1rem">
       <FoundationPlus />
     </Button>
   </div>

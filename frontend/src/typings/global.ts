@@ -1,1 +1,1 @@
-  export type CounterType = "timer" | "stopwatch" | "manual";
+  export type CounterType = "Timer" | "Stopwatch" | "Manual";

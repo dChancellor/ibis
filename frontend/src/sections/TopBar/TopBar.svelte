@@ -33,5 +33,6 @@
   p {
     margin-right: auto;
     margin-left: 1rem;
+    font-weight: 700;
   }
 </style>

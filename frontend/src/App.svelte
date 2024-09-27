@@ -11,9 +11,9 @@
   import Stopwatch from '@sections/Stopwatch/Stopwatch.svelte';
 
   import SlideSelector from '@components/SlideSelector.svelte';
-  import Button from '@components/Button.svelte';
+  import RingV2 from '@components/RingV2.svelte';
 
-  let counterType: CounterType = 'stopwatch';
+  let counterType: CounterType = 'Stopwatch';
 
   async function getConstantsFromBackend(): Promise<void> {
     try {
@@ -24,10 +24,9 @@
     }
   }
 
-  const onSelect = (selection) => {
-    console.log(selection);
+  const onSelect = (selection: string) => {
     // TODO - this can be better typed I think - I dislike using "as"
-    counterType = selection.toLowerCase() as CounterType;
+    counterType = selection as CounterType;
   };
 </script>
 
@@ -40,10 +39,17 @@
 <main class:isSideBarOpen>
   {#if $activeSkill}
     <TopBar />
-    <SlideSelector buttonLabels={['Stopwatch', 'Timer', 'Manual']} {onSelect}></SlideSelector>
-    {#if counterType === 'stopwatch'}
-      <Stopwatch />
-    {/if}
+    <SlideSelector buttonLabels={['Stopwatch', 'Timer', 'Manual']} {onSelect} selected={counterType} />
+    <div class="time-container">
+      {#if counterType === 'Stopwatch'}
+        <Stopwatch />
+      {:else if counterType === 'Timer'}
+        <RingV2 diameter={100} duration={60} strokeWidth={20} color={'#00d8ff'} />
+        <RingV2 diameter={100} duration={60} strokeWidth={20} color={'#00d8ff'} />
+      {:else if counterType === 'Manual'}
+        <p>Manual</p>
+      {/if}
+    </div>
   {/if}
 </main>
 
@@ -124,10 +130,18 @@
     flex-flow: column;
     padding: 2rem;
     align-items: center;
-    gap: 1rem;
+    gap: 2rem;
   }
   .isSideBarOpen {
     margin-inline: var(--sidebar-width);
     width: calc(100% - var(--sidebar-width));
+  }
+  .time-container {
+    background-color: #0b1527;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border-radius: 1rem;
   }
 </style>

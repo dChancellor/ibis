@@ -95,7 +95,7 @@
   }
 
   .hand span {
-    border: solid rgba(0, 0, 0);
+    border: solid rgb(0, 0, 0);
     border-width: calc(var(--outside-circle-width) / 2);
     border-top-color: transparent;
     border-right-color: transparent;

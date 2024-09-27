@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from '../../components/Button.svelte';
   import Ring from '../../components/Ring.svelte';
+  import RingV2 from '../../components/RingV2.svelte';
 
   let time = 0;
   let interval;
@@ -30,7 +31,7 @@
 
 <div class="stopwatch" on:click={toggleStopwatch} on:keypress={toggleStopwatch}>
   <!-- {formatTime(time)} -->
-  <Ring
+  <!-- <Ring
     startingColor="#fa114f"
     endColor="#f93885"
     innerDiameter={250}
@@ -53,7 +54,9 @@
     outerDiameter={180}
     type={'timed'}
     animationLength={1}
-  />
+  /> -->
+  <!-- <RingV2 diameter={100} duration={60} strokeWidth={20} color={'#00d8ff'} /> -->
+  <RingV2 diameter={55} duration={60} strokeWidth={20} color={'#FFF'} />
 </div>
 
 <style>
@@ -61,6 +64,5 @@
     position: relative;
     height: 300px;
     width: 300px;
-    margin-top: 2rem;
   }
 </style>
