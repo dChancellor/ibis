@@ -11,7 +11,7 @@
   import Stopwatch from '@sections/Stopwatch/Stopwatch.svelte';
 
   import SlideSelector from '@components/SlideSelector.svelte';
-  import RingV2 from '@components/RingV2.svelte';
+  import RingV2 from '@components/Ring.svelte';
 
   let counterType: CounterType = 'Stopwatch';
 

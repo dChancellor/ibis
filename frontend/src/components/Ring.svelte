@@ -1,141 +1,230 @@
 <script lang="ts">
-  type RingType = 'timed' | 'set';
-  export let startingColor: string;
-  export let endColor: string;
-  export let innerDiameter: number;
-  export let outerDiameter: number;
+  export let isRunning;
+  export let diameter;
+  export let duration;
+  export let color;
+  export let strokeWidth = 20;
+  export let direction: 'up' | 'down';
+  export let oneTime = false;
 
-  export let type: RingType;
-  export let animationLength: number;
-  export let percentFilled: number = null;
-
-  let firstHalfDegreesRotated: number = 0;
-  let secondHalfDegreesRotated: number = 0;
-
-  if (percentFilled > 50) {
-    firstHalfDegreesRotated = 225 - 180;
-    secondHalfDegreesRotated = 225 + (percentFilled - 50) * 3.6;
-  } else {
-    firstHalfDegreesRotated = 225 + percentFilled * 3.6;
-    secondHalfDegreesRotated = 225;
-  }
+  let showLeadingCircle = true;
+  let circumference = 2 * Math.PI * (diameter / 2);
+  let progress = 0;
 </script>
 
-{#if type === 'timed'}
-  <div
-    class={'timer'}
-    style={`--outside-circle-width: ${outerDiameter}px; 
-    --inside-circle-width: ${innerDiameter}px; 
-    --animation-length: ${animationLength}s;
-    --hand-color: conic-gradient(${startingColor}, ${endColor})
-    `}
+<div
+  id="ring"
+  style={`--max-dash-length: ${circumference}; --duration: ${duration}s; --stroke-width:${strokeWidth}; --color:${color}; --progress: ${progress}; --diameter: ${diameter + strokeWidth}px; --animation-direction: ${direction === 'up' ? 'normal' : 'reverse'}; --animation-iteration-count: ${oneTime ? 1 : 'infinite'}`}
+>
+  <svg
+    width={diameter + strokeWidth}
+    height={diameter + strokeWidth}
+    viewBox="0 0 {diameter + strokeWidth} {diameter + strokeWidth}"
   >
-    <div class="hand"><span></span></div>
-    <div class="hand"><span></span></div>
-  </div>
-{:else if type === 'set'}
+    <circle
+      class="background-ring"
+      cx={(diameter + strokeWidth) / 2}
+      cy={(diameter + strokeWidth) / 2}
+      r={diameter / 2}
+    />
+    <circle
+      class="progress-ring"
+      style={`animation-play-state:${isRunning ? 'running' : 'paused'}`}
+      cx={(diameter + strokeWidth) / 2}
+      cy={(diameter + strokeWidth) / 2}
+      r={diameter / 2}
+    />
+  </svg>
   <div
-    class={'timer'}
-    style={`--outside-circle-width: ${outerDiameter}px; 
-    --inside-circle-width: ${innerDiameter}px; 
-    --hand-color: conic-gradient(${startingColor}, ${endColor})
-    `}
-  >
-    <div class="hand">
-      <span style={`transform: rotate(${secondHalfDegreesRotated}deg);`}></span>
-    </div>
-    <div class="hand">
-      <span style={`transform: rotate(${firstHalfDegreesRotated}deg);`}></span>
-    </div>
-  </div>
-{/if}
+    class="leading-circle"
+    style={`animation-play-state:${isRunning ? 'running' : 'paused'}; display:${showLeadingCircle ? 'block' : 'none'}`}
+    on:animationend={() => (showLeadingCircle = false)}
+  />
+</div>
 
+<!-- My attempt and introducing a conic gradient to the rings. This works in the browser but does not work in the Linux native desktop app. Should try with Windows once I get that piped up to see if it works there.   -->
+<!-- <div
+  id="ring"
+  style={`--max-dash-length: ${circumference}; --duration: ${duration}s; --stroke-width:${strokeWidth}; --color:${color}; --progress: ${progress}; --diameter: ${diameter + strokeWidth}px`}
+>
+  <svg
+    width={diameter + strokeWidth}
+    height={diameter + strokeWidth}
+    viewBox="0 0 {diameter + strokeWidth} {diameter + strokeWidth}"
+  >
+    <defs>
+      <mask id={`${diameter}-mask`} maskUnits="userSpaceOnUse">
+        <circle
+          class="background-ring"
+          cx={(diameter + strokeWidth) / 2}
+          cy={(diameter + strokeWidth) / 2}
+          r={diameter / 2}
+        />
+        <circle
+          class="progress-ring"
+          style={`animation-play-state:${isRunning ? 'running' : 'paused'}`}
+          cx={(diameter + strokeWidth) / 2}
+          cy={(diameter + strokeWidth) / 2}
+          r={diameter / 2}
+        />
+      </mask>
+    </defs>
+    <foreignObject
+      x="0"
+      y="0"
+      width={diameter + strokeWidth}
+      height={diameter + strokeWidth}
+      mask={`url(#${diameter}-mask)`}
+    >
+      <div class="bg"></div>
+    </foreignObject>
+  </svg>
+  <div class="leading-circle" style={`animation-play-state:${isRunning ? 'running' : 'paused'}`} />
+</div> 
 <style>
-  .timer {
-    background: var(--hand-color);
-    border-radius: 50%;
-    height: var(--outside-circle-width);
-    position: absolute;
-    aspect-ratio: 1/1;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-  }
-
-  .timer:before {
-    content: '';
-    border-radius: 50%;
-    height: calc(var(--outside-circle-width) - 5px);
-    position: absolute;
-    aspect-ratio: 1/1;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    box-shadow: 0px 0px 0px 10px #111;
-  }
-
-  .timer:after {
-    background: var(--background-color);
-    border-radius: 50%;
-    content: '';
-    display: block;
-    position: absolute;
-    height: var(--inside-circle-width);
-    aspect-ratio: 1/1;
-    left: calc((var(--outside-circle-width) - var(--inside-circle-width)) / 2);
-    top: calc((var(--outside-circle-width) - var(--inside-circle-width)) / 2);
-  }
-
-  .hand {
-    float: left;
+  .bg {
+    /* background: conic-gradient(#00bcd4, #ffeb3b 180deg); */
+    background: var(--color);
+    width: 100%;
     height: 100%;
-    overflow: hidden;
-    position: relative;
-    width: 50%;
+    rotate: 90deg;
+    position: absolute;
+    left: 0;
+    top: 0;
   }
 
-  .hand span {
-    border: solid rgb(0, 0, 0);
-    border-width: calc(var(--outside-circle-width) / 2);
-    border-top-color: transparent;
-    border-right-color: transparent;
-    border-radius: 50%;
-    display: block;
+  #ring {
     position: absolute;
-    right: 0;
-    top: 0;
-    transform: rotate(225deg);
-    animation-duration: var(--animation-length);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  svg {
+    transform: rotate(-90deg);
+  }
+
+  circle {
+    fill: none;
+    stroke-width: var(--stroke-width);
+  }
+
+  .background-ring {
+    stroke: rgba(255, 255, 255, 0.2);
+    color: #d036d2;
+  }
+
+  .progress-ring {
+    stroke: var(--color);
+    stroke-dasharray: var(--max-dash-length);
+    stroke-dashoffset: var(--max-dash-length);
+    animation-name: spin;
+    animation-duration: var(--duration);
     animation-iteration-count: infinite;
     animation-timing-function: linear;
   }
-  .hand:first-child {
-    transform: rotate(180deg);
+
+  .leading-circle {
+    position: absolute;
+    height: var(--diameter);
+    width: calc(var(--stroke-width) * 1px);
+    top: 0px;
+    left: 50%;
+    margin-left: calc(var(--stroke-width) / 2 * -1px);
+    animation: rotateClockwise var(--duration) linear infinite;
   }
 
-  .hand:first-child span {
-    animation-name: spin1;
+  .leading-circle:before {
+    background: linear-gradient(90deg, transparent 0 40%, var(--color) 40% 100%);
+    display: block;
+    content: '';
+    height: calc(var(--stroke-width) * 1px);
+    width: calc(var(--stroke-width) * 1px);
+    border-radius: 50%;
+    box-shadow: 4px 2px 3px rgba(0, 0, 0, 0.1);
   }
 
-  .hand:last-child span {
-    animation-name: spin2;
-  }
-
-  @keyframes spin1 {
-    50% {
-      transform: rotate(225deg);
+  @keyframes spin {
+    0% {
+      stroke-dashoffset: var(--max-dash-length);
     }
     100% {
-      transform: rotate(405deg);
+      stroke-dashoffset: 0;
     }
   }
 
-  @keyframes spin2 {
-    50% {
-      transform: rotate(405deg);
+  @keyframes rotateClockwise {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+-->
+
+<style>
+  #ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  svg {
+    transform: rotate(-90deg);
+  }
+
+  circle {
+    fill: none;
+    stroke-width: var(--stroke-width);
+  }
+
+  .background-ring {
+    stroke: rgba(255, 255, 255, 0.2);
+  }
+
+  .progress-ring {
+    stroke: var(--color);
+    stroke-dasharray: var(--max-dash-length);
+    stroke-dashoffset: var(--max-dash-length);
+    animation-name: spin;
+    animation-duration: var(--duration);
+    animation-iteration-count: var(--animation-iteration-count);
+    animation-timing-function: linear;
+    animation-direction: var(--animation-direction);
+  }
+
+  .leading-circle {
+    position: absolute;
+    height: var(--diameter);
+    width: calc(var(--stroke-width) * 1px);
+    top: 0px;
+    left: 50%;
+    margin-left: calc(var(--stroke-width) / 2 * -1px);
+    animation: rotateClockwise var(--duration) linear;
+    animation-iteration-count: var(--animation-iteration-count);
+    animation-direction: var(--animation-direction);
+  }
+
+  .leading-circle:before {
+    background: linear-gradient(90deg, transparent 0 40%, var(--color) 40%);
+    display: block;
+    content: '';
+    height: calc(var(--stroke-width) * 1px);
+    width: calc(var(--stroke-width) * 1px);
+    border-radius: 50%;
+    box-shadow: 4px 2px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  @keyframes spin {
+    0% {
+      stroke-dashoffset: var(--max-dash-length);
     }
     100% {
-      transform: rotate(405deg);
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes rotateClockwise {
+    100% {
+      transform: rotate(360deg);
     }
   }
 </style>
