@@ -58,5 +58,14 @@ func InitializeDB(appName string) {
 	fmt.Println("DATABASE PREPARED SUCCESSFULLY")
     statement.Exec()
 	fmt.Println("DATABASE COMPLETE")
+}
 
+func GetRow[T any](table_name string, row_name string) (T, error){
+    var exists bool
+    var row T
+    err := DB.QueryRow("SELECT EXISTS(SELECT 1 FROM ? WHERE name = ?)", table_name,row_name).Scan(&exists)
+    if(err != nil) {
+        return row, err
+    }
+    return row, nil
 }

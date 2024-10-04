@@ -11,7 +11,7 @@
   import Stopwatch from '@sections/Stopwatch/Stopwatch.svelte';
 
   import SlideSelector from '@components/SlideSelector.svelte';
-  import RingV2 from '@components/Ring.svelte';
+  import Calendar from '@sections/Calendar/Calendar.svelte';
 
   let counterType: CounterType = 'Stopwatch';
 
@@ -50,6 +50,7 @@
       {/if}
     </div>
   {/if}
+  <Calendar />
 </main>
 
 <style>

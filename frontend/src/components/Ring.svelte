@@ -1,51 +1,54 @@
 <script lang="ts">
-  export let isRunning;
-  export let diameter;
-  export let duration;
-  export let color;
+  export let type: 'running' | 'static' = 'running';
+  export let isRunning: boolean = true;
+  export let diameter: number;
+  export let duration: number;
+  export let color: string;
   export let strokeWidth = 20;
   export let direction: 'up' | 'down';
   export let oneTime = false;
+  export let progress = 0;
 
-  let showLeadingCircle = true;
   let circumference = 2 * Math.PI * (diameter / 2);
-  let progress = 0;
+  let id = crypto.randomUUID();
+
+  let startTime: number;
+  let currentProgress = 0;
+  function animate(time: number) {
+    if (!startTime) {
+      startTime = time;
+    }
+
+    const elapsed = (time - startTime) / 1000;
+    currentProgress = Math.min((elapsed / duration) * 100, 100);
+
+    if (currentProgress > 99) {
+      isRunning = false;
+    } else if (currentProgress < progress) {
+      requestAnimationFrame(animate);
+    } else {
+      isRunning = false;
+    }
+  }
+
+  if (type === 'static') {
+    requestAnimationFrame(animate);
+  }
 </script>
 
 <div
-  id="ring"
-  style={`--max-dash-length: ${circumference}; --duration: ${duration}s; --stroke-width:${strokeWidth}; --color:${color}; --progress: ${progress}; --diameter: ${diameter + strokeWidth}px; --animation-direction: ${direction === 'up' ? 'normal' : 'reverse'}; --animation-iteration-count: ${oneTime ? 1 : 'infinite'}`}
->
-  <svg
-    width={diameter + strokeWidth}
-    height={diameter + strokeWidth}
-    viewBox="0 0 {diameter + strokeWidth} {diameter + strokeWidth}"
-  >
-    <circle
-      class="background-ring"
-      cx={(diameter + strokeWidth) / 2}
-      cy={(diameter + strokeWidth) / 2}
-      r={diameter / 2}
-    />
-    <circle
-      class="progress-ring"
-      style={`animation-play-state:${isRunning ? 'running' : 'paused'}`}
-      cx={(diameter + strokeWidth) / 2}
-      cy={(diameter + strokeWidth) / 2}
-      r={diameter / 2}
-    />
-  </svg>
-  <div
-    class="leading-circle"
-    style={`animation-play-state:${isRunning ? 'running' : 'paused'}; display:${showLeadingCircle ? 'block' : 'none'}`}
-    on:animationend={() => (showLeadingCircle = false)}
-  />
-</div>
-
-<!-- My attempt and introducing a conic gradient to the rings. This works in the browser but does not work in the Linux native desktop app. Should try with Windows once I get that piped up to see if it works there.   -->
-<!-- <div
-  id="ring"
-  style={`--max-dash-length: ${circumference}; --duration: ${duration}s; --stroke-width:${strokeWidth}; --color:${color}; --progress: ${progress}; --diameter: ${diameter + strokeWidth}px`}
+  id="container"
+  style={`
+  --max-dash-length: ${circumference}; 
+  --duration: ${duration}s; 
+  --stroke-width:${strokeWidth}; 
+  --color:${color}; 
+  --progress: ${progress}; 
+  --diameter: ${diameter + strokeWidth}px; 
+  --animation-direction: ${direction === 'up' ? 'normal' : 'reverse'}; 
+  --animation-iteration-count: ${oneTime ? 1 : 'infinite'}; 
+  --animation-easing:${type === 'running' ? 'linear' : 'ease-in-out'}
+  `}
 >
   <svg
     width={diameter + strokeWidth}
@@ -53,7 +56,7 @@
     viewBox="0 0 {diameter + strokeWidth} {diameter + strokeWidth}"
   >
     <defs>
-      <mask id={`${diameter}-mask`} maskUnits="userSpaceOnUse">
+      <mask id={`${id}-mask`}>
         <circle
           class="background-ring"
           cx={(diameter + strokeWidth) / 2}
@@ -67,80 +70,76 @@
           cy={(diameter + strokeWidth) / 2}
           r={diameter / 2}
         />
+        <circle
+          style={`animation-play-state:${isRunning ? 'running' : 'paused'}`}
+          cx={diameter + strokeWidth / 2}
+          cy={(diameter + strokeWidth) / 2}
+          r={strokeWidth / 2}
+          class="circle"
+        />
       </mask>
     </defs>
-    <foreignObject
-      x="0"
-      y="0"
-      width={diameter + strokeWidth}
-      height={diameter + strokeWidth}
-      mask={`url(#${diameter}-mask)`}
-    >
-      <div class="bg"></div>
+    <foreignObject x="0" y="0" width={diameter + strokeWidth} height={diameter + strokeWidth} mask={`url(#${id}-mask)`}>
+      <div class="bg" />
     </foreignObject>
+    <circle
+      style={`animation-play-state:${isRunning ? 'running' : 'paused'}`}
+      cx={diameter + strokeWidth / 2}
+      cy={(diameter + strokeWidth) / 2}
+      r={strokeWidth / 2 - 0.2}
+      class="circle leading"
+    />
   </svg>
-  <div class="leading-circle" style={`animation-play-state:${isRunning ? 'running' : 'paused'}`} />
-</div> 
+</div>
+
 <style>
+  #container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    --animation-shorthand: var(--duration) var(--animation-easing) 0s var(--animation-iteration-count)
+      var(--animation-direction);
+  }
+  svg {
+    fill: none;
+    transform: rotate(-90deg);
+  }
+
   .bg {
-    /* background: conic-gradient(#00bcd4, #ffeb3b 180deg); */
-    background: var(--color);
+    background: conic-gradient(var(--color), hsl(from var(--color) calc(h - 15) s l));
     width: 100%;
     height: 100%;
     rotate: 90deg;
-    position: absolute;
-    left: 0;
-    top: 0;
   }
 
-  #ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  svg {
-    transform: rotate(-90deg);
-  }
-
-  circle {
-    fill: none;
+  .background-ring,
+  .progress-ring {
     stroke-width: var(--stroke-width);
   }
 
   .background-ring {
     stroke: rgba(255, 255, 255, 0.2);
-    color: #d036d2;
   }
 
   .progress-ring {
-    stroke: var(--color);
+    stroke: white;
     stroke-dasharray: var(--max-dash-length);
     stroke-dashoffset: var(--max-dash-length);
-    animation-name: spin;
-    animation-duration: var(--duration);
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
+    animation: var(--animation-shorthand) spin;
+  }
+  .circle {
+    fill: rgb(255, 255, 255);
+    transform-origin: 50% 50%;
+    animation: var(--animation-shorthand) rotateClockwise;
   }
 
-  .leading-circle {
-    position: absolute;
-    height: var(--diameter);
-    width: calc(var(--stroke-width) * 1px);
-    top: 0px;
-    left: 50%;
-    margin-left: calc(var(--stroke-width) / 2 * -1px);
-    animation: rotateClockwise var(--duration) linear infinite;
-  }
-
-  .leading-circle:before {
-    background: linear-gradient(90deg, transparent 0 40%, var(--color) 40% 100%);
-    display: block;
-    content: '';
-    height: calc(var(--stroke-width) * 1px);
-    width: calc(var(--stroke-width) * 1px);
-    border-radius: 50%;
-    box-shadow: 4px 2px 3px rgba(0, 0, 0, 0.1);
+  .leading {
+    fill: hsl(from var(--color) calc(h - 15) s l);
+    filter: drop-shadow(0px 4px 1px rgb(0 0 0 / 0.3));
+    animation:
+      var(--animation-shorthand) rotateClockwise,
+      var(--animation-shorthand) colorChange;
   }
 
   @keyframes spin {
@@ -157,74 +156,19 @@
       transform: rotate(360deg);
     }
   }
-</style>
--->
 
-<style>
-  #ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  svg {
-    transform: rotate(-90deg);
-  }
-
-  circle {
-    fill: none;
-    stroke-width: var(--stroke-width);
-  }
-
-  .background-ring {
-    stroke: rgba(255, 255, 255, 0.2);
-  }
-
-  .progress-ring {
-    stroke: var(--color);
-    stroke-dasharray: var(--max-dash-length);
-    stroke-dashoffset: var(--max-dash-length);
-    animation-name: spin;
-    animation-duration: var(--duration);
-    animation-iteration-count: var(--animation-iteration-count);
-    animation-timing-function: linear;
-    animation-direction: var(--animation-direction);
-  }
-
-  .leading-circle {
-    position: absolute;
-    height: var(--diameter);
-    width: calc(var(--stroke-width) * 1px);
-    top: 0px;
-    left: 50%;
-    margin-left: calc(var(--stroke-width) / 2 * -1px);
-    animation: rotateClockwise var(--duration) linear;
-    animation-iteration-count: var(--animation-iteration-count);
-    animation-direction: var(--animation-direction);
-  }
-
-  .leading-circle:before {
-    background: linear-gradient(90deg, transparent 0 40%, var(--color) 40%);
-    display: block;
-    content: '';
-    height: calc(var(--stroke-width) * 1px);
-    width: calc(var(--stroke-width) * 1px);
-    border-radius: 50%;
-    box-shadow: 4px 2px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  @keyframes spin {
+  @keyframes colorChange {
     0% {
-      stroke-dashoffset: var(--max-dash-length);
+      opacity: 1;
     }
-    100% {
-      stroke-dashoffset: 0;
+    2% {
+      opacity: 0;
     }
-  }
-
-  @keyframes rotateClockwise {
-    100% {
-      transform: rotate(360deg);
+    82% {
+      opacity: 0;
+    }
+    83% {
+      opacity: 1;
     }
   }
 </style>
